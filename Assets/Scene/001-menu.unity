@@ -130,6 +130,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &87812924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 87812922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0aed7b5015d23f4a93e3a6822d445b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pink: {r: 1, g: 0, b: 0.84827566, a: 0}
+  headRender: {fileID: 1913810688}
+  headMeshArray:
+  - {fileID: 4300004, guid: 2a8aaa5c0273bd344bb7345ec99e6de8, type: 3}
+  - {fileID: 4300004, guid: db811c2e809703949b461094bfb187f4, type: 3}
+  - {fileID: 4300004, guid: 9f42173fdb1a6dc49803f6dccc680307, type: 3}
 --- !u!1 &164477757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,6 +1556,11 @@ Prefab:
 --- !u!4 &1781342197 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4836562955113710, guid: ea16882bf98f9db48876e31f027f4d4e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1781342196}
+--- !u!137 &1913810688 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137269888744408208, guid: ea16882bf98f9db48876e31f027f4d4e,
     type: 2}
   m_PrefabInternal: {fileID: 1781342196}
 --- !u!1 &2120712343
