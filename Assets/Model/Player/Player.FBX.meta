@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8c95f12fab1f79a49b3368a5bd52b091
-timeCreated: 1501206509
+timeCreated: 1501206935
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -227,7 +227,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 2
     human:
-    - boneName: b_Hips
+    - boneName: b_Spine
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -628,7 +628,7 @@ ModelImporter:
         length: 0
         modified: 0
     - boneName: b_Neck
-      humanName: UpperChest
+      humanName: Neck
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
