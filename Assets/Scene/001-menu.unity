@@ -130,28 +130,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &87812924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 87812922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0aed7b5015d23f4a93e3a6822d445b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pink: {r: 1, g: 0, b: 0.84827566, a: 0}
-  headRender: {fileID: 1913810688}
-  headMeshArray:
-  - {fileID: 4300004, guid: 2a8aaa5c0273bd344bb7345ec99e6de8, type: 3}
-  - {fileID: 4300004, guid: db811c2e809703949b461094bfb187f4, type: 3}
-  - {fileID: 4300004, guid: 9f42173fdb1a6dc49803f6dccc680307, type: 3}
-  handRender: {fileID: 753934850}
-  handMeshArray:
-  - {fileID: 4300004, guid: c8565c687d7f64f42b9bba1cffc96384, type: 3}
-  - {fileID: 4300004, guid: 097ff7f4970f4d545b108ff6f0f2c800, type: 3}
-  - {fileID: 4300004, guid: eeaa2c683fa88004fa2e87e9571da0cc, type: 3}
 --- !u!1 &164477757
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +211,7 @@ GameObject:
   - component: {fileID: 173245708}
   - component: {fileID: 173245707}
   m_Layer: 5
-  m_Name: Button
+  m_Name: BtnPlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,7 +273,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 173245708}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1202012728}
+        m_MethodName: OnPlay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &173245708
@@ -331,6 +320,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 173245705}
+--- !u!137 &322356076 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137201855279792952, guid: ea16882bf98f9db48876e31f027f4d4e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1781342196}
 --- !u!1 &542020748
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +400,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnChangeColorRed
         m_Mode: 1
         m_Arguments:
@@ -452,6 +446,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 542020748}
+--- !u!137 &554595987 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137142623161370922, guid: ea16882bf98f9db48876e31f027f4d4e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1781342196}
 --- !u!1 &649982492
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,7 +691,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnHandMeshNext
         m_Mode: 1
         m_Arguments:
@@ -813,7 +812,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnChangeColorGreen
         m_Mode: 1
         m_Arguments:
@@ -1023,7 +1022,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnChangeColorPink
         m_Mode: 1
         m_Arguments:
@@ -1069,6 +1068,68 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 969460467}
+--- !u!1 &1202012727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1202012729}
+  - component: {fileID: 1202012728}
+  m_Layer: 0
+  m_Name: MenuController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1202012728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1202012727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0aed7b5015d23f4a93e3a6822d445b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pink: {r: 1, g: 0, b: 0.84827566, a: 0}
+  headRender: {fileID: 1913810688}
+  headMeshArray:
+  - {fileID: 4300004, guid: 2a8aaa5c0273bd344bb7345ec99e6de8, type: 3}
+  - {fileID: 4300004, guid: db811c2e809703949b461094bfb187f4, type: 3}
+  - {fileID: 4300004, guid: 9f42173fdb1a6dc49803f6dccc680307, type: 3}
+  handRender: {fileID: 753934850}
+  handMeshArray:
+  - {fileID: 4300004, guid: c8565c687d7f64f42b9bba1cffc96384, type: 3}
+  - {fileID: 4300004, guid: 097ff7f4970f4d545b108ff6f0f2c800, type: 3}
+  - {fileID: 4300004, guid: eeaa2c683fa88004fa2e87e9571da0cc, type: 3}
+  bodyArray:
+  - {fileID: 1913810688}
+  - {fileID: 322356076}
+  - {fileID: 554595987}
+  - {fileID: 753934850}
+  - {fileID: 1289733269}
+--- !u!4 &1202012729
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1202012727}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5772274, y: 0.750178, z: -7.254034}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &1289733269 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137088118635869440, guid: ea16882bf98f9db48876e31f027f4d4e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1781342196}
 --- !u!1 &1370445412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,7 +1205,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnHeadMeshNext
         m_Mode: 1
         m_Arguments:
@@ -1394,7 +1455,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnChangeColorBlue
         m_Mode: 1
         m_Arguments:
@@ -1714,7 +1775,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 87812924}
+      - m_Target: {fileID: 1202012728}
         m_MethodName: OnChangeColorCyan
         m_Mode: 1
         m_Arguments:
