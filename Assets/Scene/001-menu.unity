@@ -147,6 +147,11 @@ MonoBehaviour:
   - {fileID: 4300004, guid: 2a8aaa5c0273bd344bb7345ec99e6de8, type: 3}
   - {fileID: 4300004, guid: db811c2e809703949b461094bfb187f4, type: 3}
   - {fileID: 4300004, guid: 9f42173fdb1a6dc49803f6dccc680307, type: 3}
+  handRender: {fileID: 753934850}
+  handMeshArray:
+  - {fileID: 4300004, guid: c8565c687d7f64f42b9bba1cffc96384, type: 3}
+  - {fileID: 4300004, guid: 097ff7f4970f4d545b108ff6f0f2c800, type: 3}
+  - {fileID: 4300004, guid: eeaa2c683fa88004fa2e87e9571da0cc, type: 3}
 --- !u!1 &164477757
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +405,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 542020751}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnChangeColorRed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &542020751
@@ -446,7 +462,6 @@ GameObject:
   - component: {fileID: 649982495}
   - component: {fileID: 649982494}
   - component: {fileID: 649982493}
-  - component: {fileID: 649982496}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -499,20 +514,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &649982496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 649982492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0aed7b5015d23f4a93e3a6822d445b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pink: {r: 0, g: 0, b: 0, a: 0}
-  headRender: {fileID: 0}
-  headMeshArray: []
 --- !u!1 &740101839
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,6 +612,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!137 &753934850 stripped
+SkinnedMeshRenderer:
+  m_PrefabParentObject: {fileID: 137976401546566628, guid: ea16882bf98f9db48876e31f027f4d4e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1781342196}
 --- !u!1 &794568960
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,7 +691,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 794568963}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnHandMeshNext
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &794568963
@@ -795,7 +812,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 872362667}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnChangeColorGreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &872362667
@@ -994,7 +1022,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 969460470}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnChangeColorPink
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &969460470
@@ -1105,7 +1144,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 649982496}
+      - m_Target: {fileID: 87812924}
         m_MethodName: OnHeadMeshNext
         m_Mode: 1
         m_Arguments:
@@ -1354,7 +1393,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1532083202}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnChangeColorBlue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1532083202
@@ -1663,7 +1713,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2120712346}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 87812924}
+        m_MethodName: OnChangeColorCyan
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2120712346

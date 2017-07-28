@@ -20,6 +20,10 @@ public class MenuController : MonoBehaviour {
     public Mesh[] headMeshArray;
     private int headMeshIndex = 0;
 
+    public SkinnedMeshRenderer handRender;
+    public Mesh[] handMeshArray;
+    private int handMeshIndex = 0;
+
 
 
 	public void OnHeadMeshNext() {
@@ -29,10 +33,13 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void OnHandMeshNext() {
+        handMeshIndex++;
+        handMeshIndex %= handMeshArray.Length;
+        handRender.sharedMesh = handMeshArray[handMeshIndex];
 
-	}
+    }
 
-	public void OnChangeColorBlue() {
+    public void OnChangeColorBlue() {
 		OnChangeColor(Color.blue);
 	}
 
