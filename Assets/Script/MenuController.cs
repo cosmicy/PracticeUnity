@@ -58,7 +58,7 @@ public class MenuController : MonoBehaviour {
 
 
 	private void OnChangeColor(Color c) {
-
+        headRender.material.color = c;
 	}
 
 	public void OnPlay() {
