@@ -23,7 +23,9 @@ public class MenuController : MonoBehaviour {
 
 
 	public void OnHeadMeshNext() {
-
+        headMeshIndex++;
+        headMeshIndex %= headMeshArray.Length;
+        headRender.sharedMesh = headMeshArray[headMeshIndex];
 	}
 
 	public void OnHandMeshNext() {
