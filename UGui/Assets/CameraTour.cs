@@ -75,6 +75,18 @@ public class CameraTour : MonoBehaviour {
     //双指旋转角度约束值
     private float twistDegreeRestrict = 0.5f;
 
+	//记录鼠标初始位置
+	private Vector3 firstMousePos;
+	private bool bMouseDown = false;
+
+	private float lastOffset;
+	private float lastAngle;
+
+	private float lastOffsetMem;
+	private float lastAngleMem;
+
+
+	//
 	private bool bIsMove = false;
 	//定义委托和事件
 	public  delegate void SetMoveStatus_(bool b);
@@ -108,7 +120,57 @@ public class CameraTour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		MouseT ();
+	}
+
+	void MouseT()
+	{
+		if (Input.GetMouseButtonDown(1))
+		{
+			if (!bMouseDown) {
+				bMouseDown = true;
+				firstMousePos = Input.mousePosition;
+				print ("right down" + firstMousePos);
+			}
+
+		}
+
+		if (bMouseDown) {
+			Vector3 mousePos = Input.mousePosition;
+			//print (mousePos);
+
+			Vector3 offset = mousePos - firstMousePos;
+			float angle = Mathf.Acos (offset.x / 100f);
+			//float angle = offset.x * 0.05f;
+
+			//print(offset);
+			print(angle);
+
+			float zzz = offset.y - lastOffset;
+			float aaa = angle - lastAngle;
+
+			if (zzz != lastOffsetMem && 
+				aaa != lastAngleMem && 
+				lastOffset != 0 && lastAngle != 0) {
+				CameraTwistAndHeight(zzz, angle);
+			}
+			lastOffset = offset.y;
+			lastAngle = angle;
+
+			lastOffsetMem = zzz;
+			lastAngleMem = aaa;
+
+		}
+
+
+		if (Input.GetMouseButtonUp(1))
+		{
+			bMouseDown = false;
+			lastOffset = 0;
+			lastAngle = 0;
+			print ("right up" + firstMousePos);
+		}
+
 	}
 
     protected virtual void LateUpdate()
@@ -118,11 +180,11 @@ public class CameraTour : MonoBehaviour {
         {
             // Get the fingers we want to use
             var fingers = LeanTouch.GetFingers(IgnoreGuiFingers, RequiredFingerCount);
-
-            if (fingers.Count == 0)
-            {
-                return;
-            }
+			return;
+//            if (fingers.Count == 0)
+//            {
+//                return;
+//            }
 
             //单指平移
             if (fingers.Count == 1)
@@ -135,25 +197,33 @@ public class CameraTour : MonoBehaviour {
 				}
             }
 
-            //双指操作
-            if (fingers.Count == 2)
-            {
-                //双指pinch捏放，缩放操作
-                float pinchRatio = LeanGesture.GetPinchRatio(fingers, WheelSensitivity); //捏放比例
-                //
+           
+
+            //双指pinch捏放，缩放操作
+            float pinchRatio = LeanGesture.GetPinchRatio(fingers, WheelSensitivity); //捏放比例
+                
+			//判断pinchRatio是否为1，1表示没有缩放
+			if (pinchRatio != 1.0f)
+			{
+				//
                 //CameraZoom(pinchRatio);
                 CameraDistance(pinchRatio); //换为z轴方向移动
+			}
 
-
+			//双指操作
+			if (fingers.Count == 2)
+			{
                 //双指上下移动，调整仰角
                 Vector2 heightDelta = LeanGesture.GetScreenDelta(fingers); //手指移动的屏幕距离
                 
                 //双指Twist旋转，绕屏幕中心与地面交点旋转
                 float twistDegree = LeanGesture.GetTwistDegrees(fingers, LeanGesture.GetScreenCenter(), LeanGesture.GetLastScreenCenter());
 
+				//print (heightDelta.y);
+				print (twistDegree);
                 //
-                CameraTwistAndHeight(heightDelta, twistDegree);
-            }
+                CameraTwistAndHeight(heightDelta.y, twistDegree);
+			}
 
         }
     }
@@ -212,7 +282,7 @@ public class CameraTour : MonoBehaviour {
             if (GetInterPoint(Camera, new Vector3(0.5F, 0.5F, 0), out centerPoint, out enter))
             {
                 float dest = enter - distance;
-                Debug.Log(enter + "_" + distance);
+                //Debug.Log(enter + "_" + distance);
 
                 if (dest > DistanceMin && dest < DistanceMax )
                 {
@@ -250,7 +320,7 @@ public class CameraTour : MonoBehaviour {
     /// </summary>
     /// <param name="degrees"></param>
     /// <param name="delta"></param>
-    private void CameraTwistAndHeight(Vector2 heightDelta, float twistDegree)
+    private void CameraTwistAndHeight(float heightDelta, float twistDegree)
     {
         Ray ray1 = Camera.ViewportPointToRay(new Vector3(0.4F, 0.5F, 0)); //2条从摄像机发出的射线，与地平面相交，得到旋转轴
         Ray ray2 = Camera.ViewportPointToRay(new Vector3(0.6F, 0.5F, 0));
@@ -271,7 +341,7 @@ public class CameraTour : MonoBehaviour {
             //print(point2);
 
             float degree = transform.eulerAngles.x; //当前摄像机x角
-            float raise = heightDelta.y * SensitivityHeight; //偏转角
+            float raise = heightDelta * SensitivityHeight; //偏转角
             if (degree + raise >= HeightAngleMin && degree + raise <= HeightAngleMax) //限制摄像机x角度
             {
                 //围绕屏幕中心水平轴旋转,调整仰角
