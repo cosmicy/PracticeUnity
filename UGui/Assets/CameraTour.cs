@@ -5,8 +5,11 @@ using UnityEngine;
 using Lean.Touch;
 
 public class CameraTour : MonoBehaviour {
-	public static CameraTour instance_;
-
+	private static CameraTour _instance;
+	public static CameraTour Instance()
+	{
+	   	return _instance;
+	}
     [Tooltip("主摄像机")]
     public Camera Camera;
 
@@ -16,29 +19,15 @@ public class CameraTour : MonoBehaviour {
     [Tooltip("Allows you to force rotation with a specific amount of fingers (0 = any)")]
     public int RequiredFingerCount;
 
-    [Tooltip("If you want the mouse wheel to simulate pinching then set the strength of it here")]
+    [Tooltip("滚轮缩放速度")]
     [Range(-1.0f, 1.0f)]
-    public float WheelSensitivity;
+    public float WheelSensitivity = -0.08f;
 
-    
-    [Tooltip("相机距离移动速度")]
-    public float DistanceSpeed = 20.0f;
-    [Tooltip("相机距离最小值")]
-    public float DistanceMin = 30.0f;
-    [Tooltip("相机距离最大值")]
-    public float DistanceMax = 60.0f;
-    
 
-    [Tooltip("平移变化速率, use -1 to invert")]
-    public float SensitivityPan = 0.05f;
 
-    [Tooltip("仰角变化速率, use -1 to invert")]
-    public float SensitivityHeight = 0.2f;
-
-    [Tooltip("仰角最小值")]
-    public float HeightAngleMin = 20f;
-    [Tooltip("仰角最大值")]
-    public float HeightAngleMax = 89f;
+	[Header("平移设置")]
+	[Tooltip("平移变化速率, use -1 to invert")]
+	public float SensitivityPan = 0.05f;
 
     [Tooltip("x轴范围最小值")]
     public float xMin = 0f;
@@ -49,10 +38,44 @@ public class CameraTour : MonoBehaviour {
     [Tooltip("z轴范围最大值")]
     public float zMax = 200f;
 
+	[Header("平移速度")]
     [Tooltip("x轴平移标准值")]
     public float xPanStd = 10f;
     [Tooltip("z轴平移标准值")]
     public float zPanStd = 10f;
+
+	[Header("缩放设置")]
+	[Tooltip("相机距离移动速度")]
+	public float DistanceSpeed = 20.0f;
+	[Tooltip("相机距离最小值")]
+	public float DistanceMin = 30.0f;
+	[Tooltip("相机距离最大值")]
+	public float DistanceMax = 60.0f;
+
+
+	[Header("仰角设置")]
+	[Tooltip("仰角变化速率, use -1 to invert")]
+	public float SensitivityHeight = 0.2f;
+
+	[Tooltip("仰角最小值")]
+	public float HeightAngleMin = 20f;
+	[Tooltip("仰角最大值")]
+	public float HeightAngleMax = 89f;
+
+
+	[Header("建设时调整视野")]
+	[Tooltip("距离地面中心的角度")]
+	public float CameraAltitude = 45.0f;
+	[Tooltip("距离地面中心的距离")]
+	public float CameraDistance = 20.0f;
+	[Tooltip("新建楼宇时距离地面中心的距离")]
+	public float CameraDistanceBlock = 200.0f;
+
+	//鼠标右键调整时的速度系数
+	[Header("建设时调整视野")]
+	float horizontalSpeed = 3.0f;
+	float verticalSpeed = 7.0f;
+
 
 
     //Zoom方式已经不适用
@@ -66,8 +89,8 @@ public class CameraTour : MonoBehaviour {
     private float ZoomMax = 60.0f;
 
     //
-    [Tooltip("The distance from the camera the world drag delta will be calculated from (this only matters for perspective cameras)")]
-    private float Distance = 1.0f;
+    //[Tooltip("The distance from the camera the world drag delta will be calculated from (this only matters for perspective cameras)")]
+    //private float Distance = 1.0f;
 
     //记录摄像机距离中心点的距离
     private float CameraDest = 150.0F;
@@ -75,41 +98,40 @@ public class CameraTour : MonoBehaviour {
     //双指旋转角度约束值
     private float twistDegreeRestrict = 0.5f;
 
-	//记录鼠标初始位置
-	private Vector3 firstMousePos;
-	private bool bMouseDown = false;
-
-	private float lastOffset;
-	private float lastAngle;
-
-	private float lastOffsetMem;
-	private float lastAngleMem;
+    //标识鼠标右键是否按下
+    private bool bMouseRightDown = false;
 
 
-	//
-	private bool bIsMove = false;
+
 	//定义委托和事件
-	public  delegate void SetMoveStatus_(bool b);
-	public   event  SetMoveStatus_ SetMoveStatusEvent;
+	private bool bIsMove = false;
+
+	public delegate void SetMoveStatus_(bool b);
+	public event SetMoveStatus_ SetMoveStatusEvent;
 
 	public void SetMoveStatus(bool b)
 	{
 		bIsMove = b;
 	}
 
-
-	void Awake(){
-		instance_ = this;
-		SetMoveStatusEvent+= SetMoveStatus;
-	}
 	//调用事件的方法
 	public void Set(bool b){
 
 		if (SetMoveStatusEvent != null)
 			SetMoveStatusEvent (b);	
 	}
+
+
+
+	void Awake(){
+		_instance = this;
+		SetMoveStatusEvent+= SetMoveStatus;
+	}
+
     // Use this for initialization
     void Start () {
+
+		//初始就记录相机和地面中心的距离，用于平移时计算平移速度
 		Vector3 centerPoint;
         float enter;
         if (GetInterPoint(Camera, new Vector3(0.5F, 0.5F, 0), out centerPoint, out enter))
@@ -120,57 +142,7 @@ public class CameraTour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		MouseT ();
-	}
-
-	void MouseT()
-	{
-		if (Input.GetMouseButtonDown(1))
-		{
-			if (!bMouseDown) {
-				bMouseDown = true;
-				firstMousePos = Input.mousePosition;
-				print ("right down" + firstMousePos);
-			}
-
-		}
-
-		if (bMouseDown) {
-			Vector3 mousePos = Input.mousePosition;
-			//print (mousePos);
-
-			Vector3 offset = mousePos - firstMousePos;
-			float angle = Mathf.Acos (offset.x / 100f);
-			//float angle = offset.x * 0.05f;
-
-			//print(offset);
-			print(angle);
-
-			float zzz = offset.y - lastOffset;
-			float aaa = angle - lastAngle;
-
-			if (zzz != lastOffsetMem && 
-				aaa != lastAngleMem && 
-				lastOffset != 0 && lastAngle != 0) {
-				CameraTwistAndHeight(zzz, angle);
-			}
-			lastOffset = offset.y;
-			lastAngle = angle;
-
-			lastOffsetMem = zzz;
-			lastAngleMem = aaa;
-
-		}
-
-
-		if (Input.GetMouseButtonUp(1))
-		{
-			bMouseDown = false;
-			lastOffset = 0;
-			lastAngle = 0;
-			print ("right up" + firstMousePos);
-		}
-
+		
 	}
 
     protected virtual void LateUpdate()
@@ -180,24 +152,25 @@ public class CameraTour : MonoBehaviour {
         {
             // Get the fingers we want to use
             var fingers = LeanTouch.GetFingers(IgnoreGuiFingers, RequiredFingerCount);
-			return;
+			//return;
 //            if (fingers.Count == 0)
 //            {
 //                return;
 //            }
+
+            //鼠标右键按下时上下调整视角，左右绕中心旋转
+            MouseRightUpdate();
 
             //单指平移
             if (fingers.Count == 1)
             {
                 Vector2 screenDelta = LeanGesture.GetScreenDelta(fingers);
 
-				if (!bIsMove) 
+				if (!bIsMove && !bMouseRightDown) //鼠标右键按下时，不能平移
 				{
 					CameraPan(screenDelta);
 				}
             }
-
-           
 
             //双指pinch捏放，缩放操作
             float pinchRatio = LeanGesture.GetPinchRatio(fingers, WheelSensitivity); //捏放比例
@@ -207,7 +180,7 @@ public class CameraTour : MonoBehaviour {
 			{
 				//
                 //CameraZoom(pinchRatio);
-                CameraDistance(pinchRatio); //换为z轴方向移动
+				CameraDistanceRatio(pinchRatio); //换为z轴方向移动
 			}
 
 			//双指操作
@@ -219,12 +192,9 @@ public class CameraTour : MonoBehaviour {
                 //双指Twist旋转，绕屏幕中心与地面交点旋转
                 float twistDegree = LeanGesture.GetTwistDegrees(fingers, LeanGesture.GetScreenCenter(), LeanGesture.GetLastScreenCenter());
 
-				//print (heightDelta.y);
-				print (twistDegree);
                 //
                 CameraTwistAndHeight(heightDelta.y, twistDegree);
 			}
-
         }
     }
 
@@ -269,7 +239,7 @@ public class CameraTour : MonoBehaviour {
     /// 摄像机缩放(摄像机z轴方向移动)
     /// </summary>
     /// <param name="pinchRatio"></param>
-    private void CameraDistance(float pinchRatio)
+	private void CameraDistanceRatio(float pinchRatio)
     {
         float distance = DistanceSpeed * (1 - pinchRatio); //大于0移近摄像机，小于0移远摄像机
 
@@ -290,7 +260,6 @@ public class CameraTour : MonoBehaviour {
                     transform.Translate(new Vector3(0, 0, distance), Space.Self);
                     CameraDest = dest;
                 }
-
             }
         }
 
@@ -357,7 +326,7 @@ public class CameraTour : MonoBehaviour {
             if (GetInterPoint(Camera, new Vector3(0.5F, 0.5F, 0), out centerPoint, out enter))
             {
                 Vector3 judgePoint = centerPoint;
-                print(judgePoint);
+                //print(judgePoint);
 
                 float offset = 0;
                 if (judgePoint.x > xMin - offset
@@ -431,4 +400,120 @@ public class CameraTour : MonoBehaviour {
             && judgePoint.z > zMin - offset
             && judgePoint.z < zMax + offset;
     }
+
+
+	/// <summary>
+	/// 调整摄像机仰角到某个角度
+	/// </summary>
+	/// <param name="altitude">调整到的角度</param>
+	public void CameraToAltitude(float altitude)
+	{
+		altitude = Mathf.Clamp (altitude, HeightAngleMin, HeightAngleMax);
+
+		Ray ray1 = Camera.ViewportPointToRay(new Vector3(0.4F, 0.5F, 0)); //2条从摄像机发出的射线，与地平面相交，得到旋转轴
+		Ray ray2 = Camera.ViewportPointToRay(new Vector3(0.6F, 0.5F, 0));
+
+		Plane floor = new Plane(Vector3.up, Vector3.zero); //地平面
+
+		float enter1; //射线起点与屏幕相交点距离
+		float enter2;
+		bool raycast1 = floor.Raycast(ray1, out enter1); //射线与地平面相交检测
+		bool raycast2 = floor.Raycast(ray2, out enter2);
+
+		if (raycast1 && raycast2)
+		{
+			Vector3 point1 = ray1.GetPoint(enter1); //得到相交点，point2 - point1为旋转轴
+			Vector3 point2 = ray2.GetPoint(enter2);
+
+			//print(point1);
+			//print(point2);
+
+			float degree = transform.eulerAngles.x; //当前摄像机x角
+			float raise = altitude - degree; //偏转角
+			if (degree + raise >= HeightAngleMin && degree + raise <= HeightAngleMax) //限制摄像机x角度
+			{
+				//围绕屏幕中心水平轴旋转,调整仰角
+				transform.RotateAround(point1, point2 - point1, raise);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 摄像机z轴方向移动到某个距离
+	/// </summary>
+	/// <param name="distance">移动到的距离</param>
+	public void CameraToDistance(float distance)
+	{
+		distance = Mathf.Clamp (distance, DistanceMin, DistanceMax);
+
+		float dist = distance - CameraDest;
+
+		//摄像机z轴方向移动
+		transform.Translate (new Vector3 (0, 0, -dist), Space.Self);
+		CameraDest = distance;
+	}
+
+	public float GetCurDistance()
+	{
+		return CameraDest;
+	}
+
+	//调整新建设备时的视野
+	public void AdjustCamera()
+	{
+		//如果小于设定角度，才进行调整
+		if (transform.eulerAngles.x < CameraAltitude) {
+			CameraToAltitude(CameraAltitude);
+		}
+
+		//如果大于设定距离，才进行调整
+		if (CameraDest > CameraDistance) {
+			CameraToDistance(CameraDistance);
+		}
+	}
+
+	//调整新建楼宇时的视野
+	public void AdjustCameraBlock()
+	{
+		//如果小于设定角度，才进行调整
+		if (transform.eulerAngles.x < CameraAltitude) {
+			CameraToAltitude(CameraAltitude);
+		}
+
+		//如果小于设定距离，才进行调整
+		if (CameraDest < CameraDistanceBlock) {
+			CameraToDistance(CameraDistanceBlock);
+		}
+	}
+
+
+    /// <summary>
+	/// 鼠标右键按下时，控制视野
+    /// </summary>
+    void MouseRightUpdate()
+    {
+        if (Input.GetMouseButtonDown (1)) {
+            bMouseRightDown = true;
+        }
+
+        if (Input.GetMouseButtonUp (1)) {
+            bMouseRightDown = false;
+        }
+
+        if (bMouseRightDown) {
+            MouseRightTour ();
+        }
+    }
+
+	/// <summary>
+	/// 鼠标右键，上下调整视角，左右绕中心旋转
+	/// </summary>
+    void MouseRightTour()
+    {
+        float h = horizontalSpeed * Input.GetAxis ("Mouse X");
+        float v = verticalSpeed * Input.GetAxis ("Mouse Y");
+
+        CameraTwistAndHeight(-v, h);
+    }
+		
 }
