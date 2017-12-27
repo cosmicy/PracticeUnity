@@ -1,0 +1,39 @@
+PLEASE READ THE INCLUDED USER MANUAL FOR FURTHER IMPORTANT INFORMATION
+
+What's NEW in Candela SSRR V2.1 and other Important information
+
+- New Dynamic SS Toksvig Specular AA and Reflection normal modulation, much better normal map response when reflections are blurry when roughness is high
+
+- New Roughness Convolution method, faster and 'swimming' shimmer is completely removed and no reliance on MipMaps for convolution as it caused issues with some hardware
+
+- New Candela now works in Forward Render mode with the Standard Shader
+
+- New Distance based fade, no more reliance on Fresnel to fade out reflections. Should be used together with Fresnel Fade to achieve better quality reflections
+
+- New Contact based reflection blur. At 0 (zero) reflection blur does not take into account the distance, At 1 , the 'Distance Fade Power' will control the blur strength on distance globally, individual material roughness value naturally determines the amount of roughness.
+
+- General stability, performance & quality improvements
+
+-----------------------
+
+Important:
+
+- All legacy shaders work in all render paths 
+
+- In ' Legacy Deferred lightin mode' you should only use legacy shaders
+
+- Please make sure to set the render path from the Camera
+
+- Deferred & Linear mode is best performant
+
+- Best to have normal maps on all objects if your project allows i.e. vertex normals will have issues
+
+- Make sure to have your project target platfrom on PC/Mac/Linux
+
+- For best quality in Toksvig make sure to enable high anisotropic levels such as 3-8 for your Normal Maps (if possible enable force Anisotropic textures to ON in quality settings )
+
+- !!! Due to a Unity bug, in Forward render mode only, if you have a smoothing value lower then 1 in the standard shader and then you apply a roughness texture, the texture value will get modulated!! so if you have a smoothing of 0.5 and then you assign a texture, the texture will be multiplied by 0.5 
+
+
+
+

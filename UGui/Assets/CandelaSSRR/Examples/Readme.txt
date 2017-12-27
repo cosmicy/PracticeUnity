@@ -1,0 +1,1 @@
+All the included examples work best in Linear Color mode
