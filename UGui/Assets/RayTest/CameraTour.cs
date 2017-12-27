@@ -73,8 +73,10 @@ public class CameraTour : MonoBehaviour {
 
 	//鼠标右键调整时的速度系数
 	[Header("建设时调整视野")]
-	float horizontalSpeed = 3.0f;
-	float verticalSpeed = 7.0f;
+	[Tooltip("水平旋转速度")]
+	public float horizontalSpeed = 3.0f;
+	[Tooltip("上下仰角速度")]
+	public float verticalSpeed = 20.0f;
 
 
 
@@ -158,10 +160,8 @@ public class CameraTour : MonoBehaviour {
 //                return;
 //            }
 
-            //鼠标右键按下时上下调整视角，左右绕中心旋转
-            MouseRightUpdate();
 
-            //单指平移
+            //单指操作
             if (fingers.Count == 1)
             {
                 Vector2 screenDelta = LeanGesture.GetScreenDelta(fingers);
@@ -170,6 +170,9 @@ public class CameraTour : MonoBehaviour {
 				{
 					CameraPan(screenDelta);
 				}
+
+				//鼠标右键按下时上下调整视角，左右绕中心旋转
+				MouseRightUpdate ();
             }
 
             //双指pinch捏放，缩放操作
@@ -462,9 +465,9 @@ public class CameraTour : MonoBehaviour {
 	public void AdjustCamera()
 	{
 		//如果小于设定角度，才进行调整
-		if (transform.eulerAngles.x < CameraAltitude) {
+		//if (transform.eulerAngles.x < CameraAltitude) {
 			CameraToAltitude(CameraAltitude);
-		}
+		//}
 
 		//如果大于设定距离，才进行调整
 		if (CameraDest > CameraDistance) {
